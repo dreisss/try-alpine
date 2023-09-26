@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>To-do</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+  </head>
+
+  <body class="container">
+    <header>
+      <nav>
+        <ul>
+          <li><strong>To-do</strong></li>
+        </ul>
+
+        <ul>
+          <li><button>New</button></li>
+          <li><button>Delete All</button></li>
+        </ul>
+      </nav>
+
+      <dialog>
+        <form>
+          <article>
+            <header>
+              <a href="#close" aria-label="Close" class="close"></a>
+              <strong>New To-do</strong>
+            </header>
+
+            <div>
+              <label>To-do text:</label>
+              <input type="text" />
+            </div>
+
+            <footer>
+              <button aria-label="Create">Confirm</button>
+            </footer>
+          </article>
+        </form>
+      </dialog>
+    </header>
+
+    <main style="padding: 0">
+      <ul>
+        <li style="list-style: none">
+          <input type="checkbox" />
+          <span>askdmaoskmdaosda</span>
+        </li>
+      </ul>
+    </main>
+
+    <footer>
+      <progress value="0" max="1"></progress>
+    </footer>
+  </body>
+</html>
