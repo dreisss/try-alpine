@@ -2,14 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A simple to-do web application to test the alpine.js framework." />
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
 
     <title>To-do</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net/npm/" crossorigin />
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+    <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js" />
+    <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" />
 
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
 
     <script defer>
       document.addEventListener("alpine:init", () => {
@@ -40,9 +46,9 @@
         </ul>
 
         <ul x-data>
-          <li><button @click="$dispatch('open-create')">New</button></li>
-          <li><button @click="$store.todos.deleteChecked()">Delete Completed</button></li>
-          <li><button @click="$store.todos.deleteAll()">Delete All</button></li>
+          <li><button @click="$dispatch('open-create')" class="outline">New</button></li>
+          <li><button @click="$store.todos.deleteChecked()" class="outline">Delete Completed</button></li>
+          <li><button @click="$store.todos.deleteAll()" class="outline">Delete All</button></li>
         </ul>
       </nav>
 
@@ -55,17 +61,17 @@
         <form @submit.prevent="$store.todos.createNew(text); $dispatch('close-create')">
           <article>
             <header>
-              <a @click="open = false" class="close" aria-label="Close" href=""></a>
+              <div role="link" @click="open = false" class="close" aria-label="Close" tabindex="0"></div>
               <strong>New To-do</strong>
             </header>
 
             <div>
               <label>To-do text:</label>
-              <input x-ref="textInput" x-model="text" type="text" required />
+              <input x-ref="textInput" x-model="text" type="text" aria-label="To-do text" required />
             </div>
 
             <footer>
-              <a role="button" aria-label="Create" href="">Confirm</a>
+              <a role="button" class="outline" aria-label="Create" href="">Confirm</a>
             </footer>
           </article>
         </form>
@@ -89,6 +95,7 @@
         value="0"
         :value="$store.todos.list.filter(t => t.checked).length"
         :max="$store.todos.list.length"
+        aria-label="Progress bar"
       ></progress>
     </footer>
   </body>
