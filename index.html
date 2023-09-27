@@ -2,9 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+
     <title>To-do</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script defer>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("todos", {
+          list: Alpine.$persist([]),
+
+          createNew(text) {
+            this.list.push({ text: text, checked: false });
+          },
+
+          deleteChecked() {
+            this.list = this.list.filter((t) => !t.checked);
+          },
+
+          deleteAll() {
+            this.list = [];
+          },
+        });
+      });
+    </script>
   </head>
 
   <body class="container">
@@ -14,23 +39,29 @@
           <li><strong>To-do</strong></li>
         </ul>
 
-        <ul>
-          <li><button>New</button></li>
-          <li><button>Delete All</button></li>
+        <ul x-data>
+          <li><button @click="$dispatch('open-create')">New</button></li>
+          <li><button @click="$store.todos.deleteChecked()">Delete Completed</button></li>
+          <li><button @click="$store.todos.deleteAll()">Delete All</button></li>
         </ul>
       </nav>
 
-      <dialog>
-        <form>
+      <dialog
+        x-data="{ open: false, text: '' }"
+        @open-create.window="open = true"
+        @close-create.window="open = false"
+        :open="open"
+      >
+        <form @submit.prevent="$store.todos.createNew(text)">
           <article>
             <header>
-              <a href="#close" aria-label="Close" class="close"></a>
+              <a href="#close" aria-label="Close" class="close" @click="open = false"></a>
               <strong>New To-do</strong>
             </header>
 
             <div>
               <label>To-do text:</label>
-              <input type="text" />
+              <input type="text" x-model="text" required />
             </div>
 
             <footer>
@@ -43,15 +74,22 @@
 
     <main style="padding: 0">
       <ul>
-        <li style="list-style: none">
-          <input type="checkbox" />
-          <span>askdmaoskmdaosda</span>
-        </li>
+        <template x-data x-for="todo in $store.todos.list" x-key="todo.text">
+          <li style="list-style: none">
+            <input type="checkbox" x-model="todo.checked" />
+            <span x-text="todo.text"></span>
+          </li>
+        </template>
       </ul>
     </main>
 
     <footer>
-      <progress value="0" max="1"></progress>
+      <progress
+        x-data
+        value="0"
+        :value="$store.todos.list.filter(t => t.checked).length"
+        :max="$store.todos.list.length"
+      ></progress>
     </footer>
   </body>
 </html>
