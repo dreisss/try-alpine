@@ -48,24 +48,24 @@
 
       <dialog
         x-data="{ open: false, text: '' }"
-        @open-create.window="open = true"
-        @close-create.window="open = false"
+        @open-create.window="open = true; $nextTick(() => $refs.textInput.focus())"
+        @close-create.window="open = false; text = ''"
         :open="open"
       >
-        <form @submit.prevent="$store.todos.createNew(text)">
+        <form @submit.prevent="$store.todos.createNew(text); $dispatch('close-create')">
           <article>
             <header>
-              <a href="#close" aria-label="Close" class="close" @click="open = false"></a>
+              <a @click="open = false" class="close" aria-label="Close" href=""></a>
               <strong>New To-do</strong>
             </header>
 
             <div>
               <label>To-do text:</label>
-              <input type="text" x-model="text" required />
+              <input x-ref="textInput" x-model="text" type="text" required />
             </div>
 
             <footer>
-              <button aria-label="Create">Confirm</button>
+              <a role="button" aria-label="Create" href="">Confirm</a>
             </footer>
           </article>
         </form>
